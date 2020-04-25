@@ -1,4 +1,5 @@
 import hashlib
+import binascii
 
 def sha512(s):
     return hashlib.sha512(s).digest()
@@ -152,25 +153,18 @@ def munge_string(s, pos, change):
             int.to_bytes(s[pos] ^ change, 1, "little") +
             s[pos+1:])
 
+def str_to_bitlist(string: str):
+    return [format(ord(i), 'b') for i in string]
+
+def change_string_with_int(string: str, index, number: int):
+    tmp = list(string)
+    tmp[index] = hex(number)[-1]
+    return ''.join(tmp)
+
 if __name__ == "__main__":
 
-    import binascii
-    import sys
+    y = 'abcdf15'
+    print(bytes(y.encode())
 
-
-    secrert = binascii.unhexlify('4ccd089b28ff96da9db6c346ec114e0f5b8a319f35aba624da8cf6ed4fb8a6fb3d4017c3e843895a92b70aa74d1b7ebc9c982ccf2ec4968cc0cd55f12af4660c')[:32]
-    print("secret: ", secrert)
-    public = binascii.unhexlify('3d4017c3e843895a92b70aa74d1b7ebc9c982ccf2ec4968cc0cd55f12af4660c')
-    print("public: ", public)
-    msg = binascii.unhexlify('72')
-    print("msg: ", msg)
-    signature = binascii.unhexlify('92a009a9f0d4cab8720e820b5f642540a2b27b5416503f8fb3762223ebdb69da085ac1e43e15996e458f3613d0f11d8c387b2eaeb4302aeeb00d291612bb0c0072')[:64]
-    print("signature: ", signature)
-    s = sign(secrert, msg)
-    print("s: ", s)
-    #print("s hex: ", binascii.unhexlify(s))
-
-    result = verify(public, msg, s)
-    print(result)
 
 
